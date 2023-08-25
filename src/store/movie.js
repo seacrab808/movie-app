@@ -3,18 +3,50 @@ import { Store } from "../core/heropy";
 const store = new Store({
   searchText: "",
   page: 1,
+  pageMax: 1,
   movies: [],
+  movie: {}, // 영화 상세 정보
+  loading: false,
+  message: "Search for the movie title!",
 });
-
 export default store;
+
+// 영화 검색
 export const searchMovies = async (page) => {
+  store.state.loading = true;
+  store.state.page = page;
   if (page === 1) {
-    store.state.page = 1;
     store.state.movies = [];
+    store.state.message = "";
   }
-  const res = await fetch(
-    `https://omdbapi.com?apikey=a046aaa0&s=${store.state.searchText}&page=${page}`
-  );
-  const { Search } = await res.json(); // 객체 구조 분해 할당
-  store.state.movies = [...store.state.movies, ...Search]; // 2, 3... 페이지 상태 업데이트 해야하니까
+
+  try {
+    const res = await fetch(
+      `https://omdbapi.com?apikey=a046aaa0&s=${store.state.searchText}&page=${page}`
+    );
+    const { Search, totalResults, Response, Error } = await res.json();
+    if (Response === "True") {
+      store.state.movies = [...store.state.movies, ...Search];
+      store.state.pageMax = Math.ceil(Number(totalResults) / 10);
+    } else {
+      store.state.message = Error;
+      store.state.pageMax = 1;
+    }
+  } catch (error) {
+    console.log("searchMovies error:", error);
+  } finally {
+    store.state.loading = false;
+  }
+};
+
+// 영화 세부 정보
+export const getMovieDetails = async (id) => {
+  try {
+    const res = await fetch(
+      `https://omdbapi.com?apikey=a046aaa0&i=${id}&plot=full`
+    );
+    store.state.movie = await res.json();
+  } catch (error) {
+    console.log("getMovieDetails error: ", error);
+  }
 };

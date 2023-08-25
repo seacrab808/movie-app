@@ -22,7 +22,7 @@ function routeRender(routes) {
   const routerView = document.querySelector("router-view");
   const [hash, queryString = ""] = location.hash.split("?");
 
-  // 쿼리 스트링 부분
+  // 1) 쿼리 스트링을 객체로 변환해 히스토리의 상태에 저장!
   const query = queryString.split("&").reduce((acc, cur) => {
     const [key, value] = cur.split("=");
     acc[key] = value;
@@ -30,6 +30,7 @@ function routeRender(routes) {
   }, {});
   history.replaceState(query, "");
 
+  // 2) 현재 라우트 정보를 찾아서 렌더링!
   // hash 부분 -> 클래스 이동
   const currentRoute = routes.find((route) =>
     new RegExp(`${route.path}/?$`).test(hash)
@@ -37,6 +38,7 @@ function routeRender(routes) {
   routerView.innerHTML = "";
   routerView.append(new currentRoute.component().el);
 
+  // 3) 화면 출력 후 스크롤 위치 복구!
   // 페이지 변환시 스크롤 상단으로
   window.scrollTo(0, 0);
 }
