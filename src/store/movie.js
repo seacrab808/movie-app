@@ -8,9 +8,13 @@ const store = new Store({
 
 export default store;
 export const searchMovies = async (page) => {
+  if (page === 1) {
+    store.state.page = 1;
+    store.state.movies = [];
+  }
   const res = await fetch(
-    `https://www.omdapi.com?apikey=a046aaa0&s=${store.state.searchText}&page=${page}`
+    `https://omdbapi.com?apikey=a046aaa0&s=${store.state.searchText}&page=${page}`
   );
-  const json = await res.json(); // 서버에서 가져온 내용 분석
-  console.log(json);
+  const { Search } = await res.json(); // 객체 구조 분해 할당
+  store.state.movies = [...store.state.movies, ...Search]; // 2, 3... 페이지 상태 업데이트 해야하니까
 };
