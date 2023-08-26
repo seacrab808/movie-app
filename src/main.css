@@ -86,9 +86,10 @@ body {
   position: absolute;
   top: 0;
   left: 0;
-  background-image: linear-gradient(270deg,
+  background-image: linear-gradient(
+    270deg,
     rgba(255, 255, 255, 0),
-    rgba(255, 255, 255, .1),
+    rgba(255, 255, 255, 0.1),
     rgba(255, 255, 255, 0)
   );
   transform: translateX(-100%);
@@ -96,8 +97,73 @@ body {
 }
 
 @keyframes skeleton-loader {
-  0% { transform: translateX(-100%)}
-  100% { transform: translateX(100%)}
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* 상단 바 */
+header {
+  padding: 20px 40px;
+  background-color: rgba(14, 17, 27, 0.9);
+  position: sticky;
+  top: 0;
+  z-index: 9;
+  display: flex;
+  align-items: flex-end;
+  gap: 40px;
+}
+
+header .logo {
+  font-family: "Oswald", sans-serif;
+  font-size: 20px;
+  color: var(--color-white-50);
+  text-decoration: none;
+}
+
+header .logo span {
+  color: var(--color-primary);
+}
+
+header nav ul {
+  display: flex;
+  gap: 14px;
+}
+
+header nav ul li a {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-white-50);
+  text-decoration: none;
+}
+
+header nav ul li a.active {
+  color: var(--color-primary);
+}
+
+header .user {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--color-area);
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 40px;
+  margin: auto;
+  transition: 0.3s;
+}
+
+header .user:hover {
+  transform: scale(1.2);
+}
+
+header .user img {
+  width: 100%;
 }
 
 /* 타이틀 부분 */
